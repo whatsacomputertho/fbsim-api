@@ -1,0 +1,27 @@
+name: FBSim API build
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build and push the FBSim API image
+      run: |
+        # Get the package version from cargo.toml
+        echo "[INFO] Getting rust package version from cargo.toml"
+        RUST_PACKAGE_VERSION=$(
+          awk -F ' = ' '$1 ~ /version/ { gsub(/[\"]/, "", $2); printf("%s",$2) }' Cargo.toml
+        );
+        echo "[DEBU] Package version: ${RUST_PACKAGE_VERSION}"
+        
+        # Build the FBSim API image
+        echo "[INFO] Building and pushing ghcr.io/whatsacomputertho/fbsim-api:${RUST_PACKAGE_VERSION}"
+        docker build . \
+          -f Conainerfile \
+          --tag ghcr.io/whatsacomputertho/fbsim-api:${RUST_PACKAGE_VERSION}
+        docker push \
+          -u whatsacomputertho \
+          -p ${GITHUB_TOKEN} \
+          ghcr.io/whatsacomputertho/fbsim-api:${RUST_PACKAGE_VERSION}
