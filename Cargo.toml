@@ -1,0 +1,13 @@
+[package]
+name = "fbsim-api"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+fbsim-core = { version = "1.0.0-alpha.2", features = ["rocket_okapi"] }
+rand = "0.8.5"
+rocket = { version = "0.5.1", features = ["json"] }
+rocket_okapi = { version = "0.9.0", features = ["swagger"] }
+serde = { version = "1.0.217", features = ["derive"] }
