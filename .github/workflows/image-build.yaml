@@ -20,7 +20,8 @@ jobs:
         echo "[INFO] Building and pushing ghcr.io/whatsacomputertho/fbsim-api:${RUST_PACKAGE_VERSION}"
         docker login \
           -u whatsacomputertho \
-          -p ${{ secrets.GITHUB_TOKEN }}
+          -p ${{ secrets.GITHUB_TOKEN }} \
+          ghcr.io/whatsacomputertho
         docker build . \
           -f Containerfile \
           --tag ghcr.io/whatsacomputertho/fbsim-api:${RUST_PACKAGE_VERSION}
