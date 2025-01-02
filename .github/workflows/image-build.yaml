@@ -18,10 +18,11 @@ jobs:
         
         # Build the FBSim API image
         echo "[INFO] Building and pushing ghcr.io/whatsacomputertho/fbsim-api:${RUST_PACKAGE_VERSION}"
+        docker login \
+          -u whatsacomputertho \
+          -p ${GITHUB_TOKEN}
         docker build . \
           -f Containerfile \
           --tag ghcr.io/whatsacomputertho/fbsim-api:${RUST_PACKAGE_VERSION}
         docker push \
-          -u whatsacomputertho \
-          -p ${GITHUB_TOKEN} \
           ghcr.io/whatsacomputertho/fbsim-api:${RUST_PACKAGE_VERSION}
