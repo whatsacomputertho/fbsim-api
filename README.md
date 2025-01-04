@@ -10,8 +10,14 @@ A REST API built atop the fbsim-core Rust crate which enables users to simulate 
 
 ### Running the server
 
-To run the server natively, one can simply clone this repository and `cargo run` / `cargo build`.  Alternatively, to run the server as a container, one can again clone this repository and run the following (here, `podman` can optionally be replaced with `docker`).
+**Running locally via node**
 
+To run the server natively, one can simply clone this repository and run `cargo run`.  Alternatively, to run the server as a container, one can `podman run` / `docker run` a published version of the image
+```
+ghcr.io/whatsacomputertho/fbsim-api:v1.0.0-alpha.1
+```
+
+Or one can build locally by cloning this repository and running the following (here, `podman` can optionally be replaced with `docker`).
 ```sh
 # Build the container image
 podman build -f Containerfile . -t fbsim-api:latest
