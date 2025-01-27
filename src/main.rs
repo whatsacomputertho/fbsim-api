@@ -29,7 +29,7 @@ fn game_sim(matchup: Json<FootballMatchup>) -> Json<BoxScore> {
         matchup.home_team(),
         matchup.away_team(),
         &mut rng
-    );
+    ).unwrap();
 
     // Return the box score as a JSON string
     Json(box_score)
