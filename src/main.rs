@@ -1,8 +1,5 @@
-mod matchup;
-
-use crate::matchup::FootballMatchup;
-
 use fbsim_core::boxscore::BoxScore;
+use fbsim_core::matchup::FootballMatchup;
 use fbsim_core::sim::BoxScoreSimulator;
 use rand;
 use rocket::http::Method;
