@@ -1,36 +1,15 @@
-use fbsim_core::boxscore::BoxScore;
-use fbsim_core::matchup::FootballMatchup;
-use fbsim_core::sim::BoxScoreSimulator;
-use rand;
+mod game;
+mod league;
+
 use rocket::http::Method;
-use rocket::serde::{json::Json};
 use rocket_cors::{catch_all_options_routes, AllowedOrigins, CorsOptions};
-use rocket_okapi::{openapi, openapi_get_routes, swagger_ui::*};
+use rocket_okapi::{openapi_get_routes, swagger_ui::*};
+
+use crate::game::{game_sim, okapi_add_operation_for_game_sim_};
+use crate::league::{get_league, okapi_add_operation_for_get_league_};
+use crate::league::team::{add_team, okapi_add_operation_for_add_team_};
 
 #[macro_use] extern crate rocket;
-
-/// Simulate a football game
-///
-/// Given a spec defining the matchup between the home and away team, this
-/// endpoint simulates a game between the two teams.
-#[openapi(tag = "Games")]
-#[post("/game/sim", format="application/json", data="<matchup>")]
-fn game_sim(matchup: Json<FootballMatchup>) -> Json<BoxScore> {
-    // Get the matchup from the request body
-    let matchup: FootballMatchup = matchup.into_inner();
-
-    // Simulate the game
-    let box_score_sim = BoxScoreSimulator::new();
-    let mut rng = rand::thread_rng();
-    let box_score = box_score_sim.sim(
-        matchup.home_team(),
-        matchup.away_team(),
-        &mut rng
-    ).unwrap();
-
-    // Return the box score as a JSON string
-    Json(box_score)
-}
 
 // Set CORS headers on responses
 fn get_cors() -> CorsOptions {
@@ -50,9 +29,9 @@ fn get_cors() -> CorsOptions {
 fn rocket() -> _ {
     let cors = get_cors().to_cors().unwrap();
     rocket::build()
-        .mount("/", routes![game_sim])
+        .mount("/", routes![game_sim,get_league,add_team])
         .mount("/", catch_all_options_routes())
-        .mount("/openapi", openapi_get_routes![game_sim])
+        .mount("/openapi", openapi_get_routes![game_sim,get_league,add_team])
         .mount("/openapi", make_swagger_ui(&SwaggerUIConfig {
             url: "openapi.json".to_owned(),
             ..Default::default()
